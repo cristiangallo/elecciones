@@ -21,7 +21,7 @@ class PartidoAdmin(admin.ModelAdmin):
 
 @admin.register(Candidato)
 class CandidatoAdmin(admin.ModelAdmin):
-    list_display = ["nombre", "partido", "thumb_partido"]
+    list_display = ["nombre", "thumb_foto", "partido", "thumb_partido"]
 
 
 @admin.register(Eleccion)

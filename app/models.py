@@ -4,6 +4,8 @@ from cities_light.abstract_models import (AbstractCity, AbstractRegion, Abstract
 from cities_light.receivers import connect_default_signals
 from sorl.thumbnail import ImageField as sorl_thumbnail_ImageField
 from autoslug import AutoSlugField
+from sorl.thumbnail import get_thumbnail
+from django.utils.safestring import mark_safe
 from django.db import models
 
 
@@ -45,30 +47,41 @@ connect_default_signals(City)
 
 
 class Partido(models.Model):
+    def path_logo(instance, filename):
+        from os import path
+        upload_to = f"logos-partidos/"
+        return path.join(upload_to, f"{instance.slug}.{filename.split('.')[-1]}")
+
     partido = models.CharField(max_length=255)
-    logo = sorl_thumbnail_ImageField(max_length=255, upload_to="imagenes/logos-partidos/")
+    logo = sorl_thumbnail_ImageField(max_length=255, upload_to=path_logo)
     slug = AutoSlugField(populate_from='partido', unique=True, editable=False)
 
     def __str__(self):
         return self.partido
 
     def thumb_partido(self):
-        from sorl.thumbnail import get_thumbnail
-        if not self.logo:
-            return ""
-        from django.utils.safestring import mark_safe
         return mark_safe(f'<img src="{get_thumbnail(self.logo, "100", crop="center", quality=95).url}" />')
     thumb_partido.short_description = 'Logo'
 
 
 class Candidato(models.Model):
+    def path_foto(instance, filename):
+        from os import path
+        upload_to = f"fotos-candidatos/"
+        return path.join(upload_to, f"{instance.slug}.{filename.split('.')[-1]}")
+
     nombre = models.CharField(max_length=255)
-    foto = sorl_thumbnail_ImageField(max_length=255, upload_to="imagenes/fotos-candidatos/")
+    foto = sorl_thumbnail_ImageField(max_length=255, upload_to=path_foto)
     partido = models.ForeignKey(Partido, on_delete=models.PROTECT)
     slug = AutoSlugField(populate_from='nombre', unique=True, editable=False)
 
     def __str__(self):
         return self.nombre
+
+    def thumb_foto(self):
+        return mark_safe(f'<img src="{get_thumbnail(self.foto, "100", crop="center", quality=95).url}" />')
+
+    thumb_foto.short_description = 'Logo'
 
     def thumb_partido(self):
 
