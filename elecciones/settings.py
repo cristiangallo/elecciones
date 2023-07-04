@@ -22,15 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, False),
     USE_HTTPS=(bool, True),
-    ALLOWED_HOSTS=(list, ['127.0.0.1']),
+    ALLOWED_HOSTS=(list, ["127.0.0.1"]),
     DB_NAME=(str, "db.sqlite3"),
-    SECRET_KEY=(str, 'django-insecure-*f3%^$-zt^=zd_uqli9fm)e+-)(lv*mep3-*dkrypc59qe+6%6'),
-    EMAIL_HOST=(str, '127.0.0.1'),
+    SECRET_KEY=(str, "django-insecure-*f3%^$-zt^=zd_uqli9fm)e+-)(lv*mep3-*dkrypc59qe+6%6"),
+    EMAIL_HOST=(str, "127.0.0.1"),
     EMAIL_PORT=(int, 465),
     DEFAULT_FROM_EMAIL=(str, "root@localhost"),
     EMAIL_USE_TLS=(bool, False),
+    THUMBNAIL_PREFIX=(str, "cache/"),
 )
-environ.Env.read_env(BASE_DIR / '.env')
+environ.Env.read_env(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -143,7 +144,7 @@ STATIC_ROOT = BASE_DIR / STATIC_URL
 
 MEDIA_URL = 'media/'
 
-MEDIA_ROOT = BASE_DIR / 'templates/static/'
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -162,6 +163,8 @@ EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_TLS = env('EMAIL_USE_TLS')
 EMAIL_SUBJECT_PREFIX = '[Elecciones]'
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+
+THUMBNAIL_PREFIX = env('THUMBNAIL_PREFIX')
 
 if not DEBUG:
     LOGGING = {
