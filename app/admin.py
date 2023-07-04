@@ -16,7 +16,7 @@ class CargoElectoAdmin(admin.ModelAdmin):
 
 @admin.register(Partido)
 class PartidoAdmin(admin.ModelAdmin):
-    list_display = ["partido", "thumb_partido"]
+    list_display = ["partido", "thumb_partido", "slug"]
 
 
 @admin.register(Candidato)

@@ -3,6 +3,7 @@
 from cities_light.abstract_models import (AbstractCity, AbstractRegion, AbstractSubRegion, AbstractCountry)
 from cities_light.receivers import connect_default_signals
 from sorl.thumbnail import ImageField as sorl_thumbnail_ImageField
+from autoslug import AutoSlugField
 from django.db import models
 
 
@@ -45,7 +46,8 @@ connect_default_signals(City)
 
 class Partido(models.Model):
     partido = models.CharField(max_length=255)
-    logo = sorl_thumbnail_ImageField(max_length=255, upload_to="imagenes/logos-partidos/", null=True, blank=True)
+    logo = sorl_thumbnail_ImageField(max_length=255, upload_to="imagenes/logos-partidos/")
+    slug = AutoSlugField(populate_from='partido', unique=True, editable=False)
 
     def __str__(self):
         return self.partido
@@ -61,8 +63,9 @@ class Partido(models.Model):
 
 class Candidato(models.Model):
     nombre = models.CharField(max_length=255)
-    foto = sorl_thumbnail_ImageField(max_length=255, upload_to="imagenes/fotos-candidatos/", null=True, blank=True)
+    foto = sorl_thumbnail_ImageField(max_length=255, upload_to="imagenes/fotos-candidatos/")
     partido = models.ForeignKey(Partido, on_delete=models.PROTECT)
+    slug = AutoSlugField(populate_from='nombre', unique=True, editable=False)
 
     def __str__(self):
         return self.nombre
