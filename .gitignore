@@ -1,8 +1,4 @@
-/templates/static/cache/
-/templates/static/imagenes/
+/templates/static/cache
+/templates/static/imagenes
 /db.sqlite3
-/imagenes/logos-partidos/descarga.png
-/templates/static/fotos-candidatos/.jpeg
-/templates/static/fotos-candidatos/carolina-losada.jpeg
-/templates/static/logos-partidos/juntos-por-el-cambio.png/juntos-por-el-cambio.png
-/templates/static/logos-partidos/juntos-por-el-cambio_XAFlsQz.png
+
