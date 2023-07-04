@@ -4,6 +4,11 @@ from django.contrib import admin
 from .models import Partido, Candidato, Eleccion, Country, Region, SubRegion, City, CargoElecto
 
 
+admin.site.site_title = "Elecciones"
+admin.site.site_header = "Elecciones"
+admin.site.index_title = "Elecciones"
+
+
 @admin.register(CargoElecto)
 class CargoElectoAdmin(admin.ModelAdmin):
     pass

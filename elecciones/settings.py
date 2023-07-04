@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 """
 Django settings for elecciones project.
 
@@ -10,22 +12,37 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import environ
 from pathlib import Path
+from email.utils import getaddresses
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env(
+    DEBUG=(bool, False),
+    USE_HTTPS=(bool, True),
+    ALLOWED_HOSTS=(list, ['127.0.0.1']),
+    DB_NAME=(str, "db.sqlite3"),
+    SECRET_KEY=(str, 'django-insecure-*f3%^$-zt^=zd_uqli9fm)e+-)(lv*mep3-*dkrypc59qe+6%6'),
+    EMAIL_HOST=(str, '127.0.0.1'),
+    EMAIL_PORT=(int, 465),
+    DEFAULT_FROM_EMAIL=(str, "root@localhost"),
+    EMAIL_USE_TLS=(bool, False),
+)
+environ.Env.read_env(BASE_DIR / '.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*f3%^$-zt^=zd_uqli9fm)e+-)(lv*mep3-*dkrypc59qe+6%6'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+DEBUG = env('DEBUG')
+USE_HTTPS = env('USE_HTTPS')
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+ADMINS = getaddresses([env('ADMINS')])
 
 
 # Application definition
@@ -80,7 +97,7 @@ WSGI_APPLICATION = 'elecciones.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / env('DB_NAME'),
     }
 }
 
@@ -145,3 +162,49 @@ CITIES_LIGHT_CITY_SOURCES = [
      "http://download.geonames.org/export/dump/cities500.zip",
      ]
 CITIES_LIGHT_DATA_DIR = '/tmp/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_USE_TLS = env('EMAIL_USE_TLS')
+EMAIL_SUBJECT_PREFIX = '[Elecciones]'
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+
+if not DEBUG:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            },
+            'simple': {
+                'format': '%(levelname)s %(message)s'
+            },
+        },
+        'handlers': {
+            'file': {
+                'level': 'ERROR',
+                'class': 'logging.FileHandler',
+                'filename': BASE_DIR / "debug.log",
+                'formatter': 'verbose'
+            },
+            'mail_admins': {
+                'level': 'ERROR',
+                'class': 'django.utils.log.AdminEmailHandler',
+                # 'formatter': 'simple'
+            },
+        },
+        'loggers': {
+            'django': {
+                'handlers': ['file'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
+            'django.request': {
+                'handlers': ['mail_admins'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
+        },
+    }
