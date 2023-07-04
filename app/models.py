@@ -105,13 +105,28 @@ class Cargo(models.TextChoices):
 
 
 class CargoElecto(models.Model):
+    from smart_selects.db_fields import ChainedForeignKey
+
     candidato = models.ForeignKey(Candidato, on_delete=models.PROTECT)
     eleccion = models.ForeignKey(Eleccion, on_delete=models.PROTECT)
     cargo = models.CharField(max_length=2, choices=Cargo.choices)
-    pais = models.ForeignKey(Country, on_delete=models.PROTECT, null=True, blank=True)
-    provincia = models.ForeignKey(Region, on_delete=models.PROTECT, null=True, blank=True)
-    localidad = models.ForeignKey(City, on_delete=models.PROTECT, null=True, blank=True)
+    pais = models.ForeignKey(Country, on_delete=models.PROTECT, verbose_name="País")
+    provincia = ChainedForeignKey(
+        Region,
+        chained_field="pais",
+        chained_model_field="country",
+        show_all=False,
+        auto_choose=True,
+        sort=True, null=True, blank=True)
+    localidad = ChainedForeignKey(
+        City,
+        chained_field="provincia",
+        chained_model_field="region",
+        show_all=False,
+        auto_choose=True,
+        sort=True, null=True, blank=True)
     cant_votos = models.IntegerField(default=0)
+    ult_actualizacion = models.DateField(auto_now=True)
 
     def __str__(self):
         return f"{self.candidato} --> {self.get_cargo_display()} ({self.eleccion})"

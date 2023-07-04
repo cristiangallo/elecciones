@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cities_light',
     'sorl.thumbnail',
+    'smart_selects',
     'app.apps.AppConfig',
 ]
 
@@ -152,15 +153,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CITIES_LIGHT_APP_NAME = 'app'
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['es']
 CITIES_LIGHT_INCLUDE_COUNTRIES = ['AR']
-CITIES_LIGHT_INCLUDE_CITY_TYPES = [
-    'PPL', 'PPL', 'PPLA', 'PPLA2', 'PPLA3', 'PPLA4', 'PPLC', 'PPLCH', 'PPLF', 'PPLG', 'PPLH', 'PPLL', 'PPLQ', 'PPLR',
-    'PPLS', 'PPLW', 'PPLW', 'PPLX', 'STLMT']
-CITIES_LIGHT_CITY_SOURCES = [
-    "http://download.geonames.org/export/dump/cities15000.zip",
-    "http://download.geonames.org/export/dump/cities5000.zip",
-     "http://download.geonames.org/export/dump/cities1000.zip",
-     "http://download.geonames.org/export/dump/cities500.zip",
-     ]
+
 CITIES_LIGHT_DATA_DIR = '/tmp/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
